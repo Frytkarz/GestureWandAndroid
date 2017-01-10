@@ -1,0 +1,47 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="@dimen/activity_margin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pl.chipsoft.gesturewand.fragments.SummaryFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        android:divider="@drawable/linearlayout_divider"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_big"
+            android:text="@string/summary_message" />
+
+        <TextView
+            android:id="@+id/fsTxtInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:paddingTop="@dimen/activity_margin"
+            android:textSize="@dimen/text_medium" />
+
+        <!--<Button-->
+            <!--android:id="@+id/fsBtnLearn"-->
+            <!--style="@style/AppTheme.Button"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:text="@string/learn"/>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/fsBtnTest"-->
+            <!--style="@style/AppTheme.Button"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:text="@string/test"/>-->
+
+    </LinearLayout>
+
+
+
+</FrameLayout>

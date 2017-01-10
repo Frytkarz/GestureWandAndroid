@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    android:divider="@drawable/linearlayout_divider"
+    tools:context="pl.chipsoft.gesturewand.fragments.SettingsFragment">
+
+    <Button
+        android:id="@+id/fsBtnReTrain"
+        style="@style/AppTheme.Button"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/retrain_network" />
+
+    <Button
+        android:id="@+id/fsBtnClearAll"
+        style="@style/AppTheme.Button"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/clear_db" />
+
+    <TextView
+        android:id="@+id/fsTxtInfo"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_big" />
+
+</LinearLayout>

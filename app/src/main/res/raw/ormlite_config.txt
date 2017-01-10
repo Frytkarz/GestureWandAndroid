@@ -1,0 +1,67 @@
+#
+# generated on 2017/01/08 07:34:14
+#
+# --table-start--
+dataClass=pl.chipsoft.gesturewand.library.model.History
+tableName=history
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=gestureId
+# --field-end--
+# --field-start--
+fieldName=date
+# --field-end--
+# --field-start--
+fieldName=mode
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=pl.chipsoft.gesturewand.library.model.Gesture
+tableName=gestures
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+indexName=gestures_name_idx
+# --field-end--
+# --field-start--
+fieldName=ideal
+# --field-end--
+# --field-start--
+fieldName=createDate
+# --field-end--
+# --field-start--
+fieldName=action
+# --field-end--
+# --field-start--
+fieldName=actionParam
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=pl.chipsoft.gesturewand.library.model.Record
+tableName=records
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=gestureId
+# --field-end--
+# --field-start--
+fieldName=json
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
