@@ -11,6 +11,8 @@
     <string name="settings">SETTINGS</string>
     <string name="summary">SUMMARY</string>
 
+    <string name="vertical_ellipsis">&#8942;</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
@@ -29,4 +31,17 @@
     <string name="enough_gestures">You have created enough samples. Click SAVE to save gesture!</string>
     <string name="retrain_network">RETRAIN NETWORK</string>
     <string name="clear_db">CLEAR ALL</string>
+    <string name="random_test">RANDOM TEST</string>
+    <string name="QUIT">EXIT</string>
+    <string name="edit">EDIT</string>
+    <string name="delete">DELETE</string>
+    <string name="delete_gesture_ask">Do you really want to delete gesture?</string>
+    <string name="cancel">CANCEL</string>
+    <string name="delete_gesture">Delete gesture</string>
+    <string name="settings_message">Use optoins with caution! Do not change antyhing until you really know what do you want to do.</string>
+    <string name="min_gesture_count">Min gesture count</string>
+    <string name="records_count">Records count</string>
+    <string name="samples_count">Samples count</string>
+    <string name="max_error">Max error</string>
+    <string name="clear_gestures">CLEAR GESTURES</string>
 </resources>

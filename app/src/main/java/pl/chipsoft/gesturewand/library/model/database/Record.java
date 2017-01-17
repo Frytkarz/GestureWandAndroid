@@ -1,4 +1,4 @@
-package pl.chipsoft.gesturewand.library.model;
+package pl.chipsoft.gesturewand.library.model.database;
 
 import com.google.gson.Gson;
 import com.j256.ormlite.field.DatabaseField;
@@ -9,6 +9,8 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "records")
 public class Record {
+    public static final String FIELD_GESTURE_ID = "gestureId";
+
     @DatabaseField(generatedId = true)
     private int id;
 

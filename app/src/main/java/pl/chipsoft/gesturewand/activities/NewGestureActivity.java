@@ -26,7 +26,7 @@ import java.util.List;
 import pl.chipsoft.gesturewand.R;
 import pl.chipsoft.gesturewand.library.listeners.TrainListener;
 import pl.chipsoft.gesturewand.library.managers.GestureManager;
-import pl.chipsoft.gesturewand.library.model.Gesture;
+import pl.chipsoft.gesturewand.library.model.database.Gesture;
 import pl.chipsoft.gesturewand.library.model.GestureLearn;
 import pl.chipsoft.gesturewand.library.model.Position;
 
@@ -47,6 +47,8 @@ public class NewGestureActivity extends Activity {
 
     private GestureLearn gestureLearn;
     private List<Position> records;
+
+    private GestureManager gestureManager = GestureManager.getInstance();
 
     private SensorEventListener sensorListener = new SensorEventListener() {
         @Override
@@ -82,7 +84,8 @@ public class NewGestureActivity extends Activity {
                 appAdapter.getItem(spnApp.getSelectedItemPosition())));
 
         new Thread(() -> {
-            boolean result = GestureManager.getInstance().train(gestureLearn, trainListener);
+            boolean result = gestureManager.train(gestureLearn, trainListener,
+                    accelerometer.getMaximumRange());
             runOnUiThread(() -> {
                 if(result)
                     finish();
@@ -101,7 +104,7 @@ public class NewGestureActivity extends Activity {
         setContentView(R.layout.activity_new_gesture);
 
         btnSave = (Button) findViewById(R.id.angBtnSave);
-        spnApp = (Spinner) findViewById(R.id.angSpnApp);
+        spnApp = (Spinner) findViewById(R.id.angSpnParam);
         txtName = (EditText) findViewById(R.id.angETxtName);
         txtInfo = (TextView) findViewById(R.id.angTxtInfo);
 
@@ -163,7 +166,8 @@ public class NewGestureActivity extends Activity {
         if(volume_up && volume_down){
             Log.d(getClass().getName(), "Gesture record finished!");
 
-            if(gestureLearn.getRecords().size() >= GestureLearn.RECORDS_COUNT){
+            if(gestureLearn.getRecords().size() >= gestureManager.getDatabase().getConfiguration().
+                    getRecordsCount() ){
                 txtInfo.setText(getString(R.string.enough_gestures));
                 return true;
             }
@@ -172,14 +176,17 @@ public class NewGestureActivity extends Activity {
                 pressed = false;
                 sensorManager.unregisterListener(sensorListener);
                 gestureLearn.getRecords().add(GestureLearn.interpolate(records,
-                            GestureLearn.SINGLE_RECORD_COUNT));
+                            gestureManager.getDatabase().getConfiguration().getSamplesCount()));
 
-                if(gestureLearn.getRecords().size() < GestureLearn.RECORDS_COUNT){
+                if(gestureLearn.getRecords().size() < gestureManager.getDatabase().
+                        getConfiguration().getRecordsCount()){
                     txtInfo.setText(getString(R.string.gesture_left,
-                            (GestureLearn.RECORDS_COUNT - gestureLearn.getRecords().size())));
+                            (gestureManager.getDatabase().getConfiguration().getRecordsCount()
+                                    - gestureLearn.getRecords().size())));
                 }
 
-                else if (gestureLearn.getRecords().size() == GestureLearn.RECORDS_COUNT){
+                else if (gestureLearn.getRecords().size() == gestureManager.getDatabase().
+                        getConfiguration().getRecordsCount()){
                     btnSave.setEnabled(true);
                     txtInfo.setText(getString(R.string.done));
                     ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(200);

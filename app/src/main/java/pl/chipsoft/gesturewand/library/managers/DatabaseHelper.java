@@ -13,9 +13,11 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import pl.chipsoft.gesturewand.library.model.Gesture;
-import pl.chipsoft.gesturewand.library.model.History;
-import pl.chipsoft.gesturewand.library.model.Record;
+import pl.chipsoft.gesturewand.library.model.database.Configuration;
+import pl.chipsoft.gesturewand.library.model.database.Gesture;
+import pl.chipsoft.gesturewand.library.model.database.History;
+import pl.chipsoft.gesturewand.library.model.database.Record;
+import pl.chipsoft.gesturewand.library.utils.DatabaseConfigUtil;
 
 /**
  * Created by Maciej Frydrychowicz on 18.12.2016.
@@ -24,26 +26,24 @@ import pl.chipsoft.gesturewand.library.model.Record;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "gesture.db";
     // inkrementacja przy zmnianie obiektów
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 17;
 
+    private final Map<Class, Dao> daos;
 
-    private final Map<Class, Dao> daos = new HashMap<Class, Dao>(){{
-       put(Gesture.class, null);
-       put(History.class, null);
-       put(Record.class, null);
-    }};
+    private Configuration configuration;
 
     DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        daos = new HashMap<>(DatabaseConfigUtil.classes.length);
+        for (Class c : DatabaseConfigUtil.classes)
+            daos.put(c, null);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
         try {
             Log.d(DatabaseHelper.class.getName(), "Creating database...");
-            for (Class c : daos.keySet()) {
-                TableUtils.createTable(connectionSource, c);
-            }
+            createAll(connectionSource);
 
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
@@ -85,9 +85,27 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return daos.get(type);
     }
 
-    public void dropAll(ConnectionSource connectionSource) throws SQLException {
+    private void dropAll(ConnectionSource connectionSource) throws SQLException {
         for (Class c : daos.keySet()) {
             TableUtils.dropTable(connectionSource, c, true);
+        }
+    }
+
+    private void createAll(ConnectionSource connectionSource) throws SQLException {
+        for (Class c : daos.keySet()) {
+            TableUtils.createTable(connectionSource, c);
+        }
+
+        configuration = new Configuration();
+        getDaoGen(Configuration.class).create(configuration);
+    }
+
+    public void clearAll(){
+        try {
+            dropAll(getConnectionSource());
+            createAll(getConnectionSource());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -102,5 +120,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         //gestures = null;
         //simpleRuntimeDao = null;
+    }
+
+    public Configuration getConfiguration() {
+        if(configuration == null) {
+            try {
+                configuration = getDaoGen(Configuration.class).queryForAll().get(0);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return configuration;
     }
 }

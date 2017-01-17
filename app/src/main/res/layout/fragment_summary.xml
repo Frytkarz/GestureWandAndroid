@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:showDividers="middle"
-        android:divider="@drawable/linearlayout_divider"
+        android:divider="@drawable/linearlayout_divider_big"
         >
 
         <TextView

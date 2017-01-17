@@ -1,4 +1,4 @@
-package pl.chipsoft.gesturewand.library.model;
+package pl.chipsoft.gesturewand.library.model.database;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -8,9 +8,6 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "gestures")
 public class Gesture {
-    public static final int ID_DIV = 100;
-    public static final double ID_ROUND = 0.005;
-
     @DatabaseField(generatedId = true)
     private int id;
 

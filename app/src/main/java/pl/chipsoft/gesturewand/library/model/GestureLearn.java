@@ -3,19 +3,21 @@ package pl.chipsoft.gesturewand.library.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.chipsoft.gesturewand.library.model.database.Gesture;
+
 /**
  * Created by Maciej Frydrychowicz on 03.01.2017.
  */
 
 public class GestureLearn {
-    public static final int RECORDS_COUNT = 20;
-    public static final int SINGLE_RECORD_COUNT = 30;
+//    public static final int RECORDS_COUNT = 10;
+//    public static final int SINGLE_RECORD_COUNT = 30;
 
     private Gesture gesture;
     private List<List<Position>> records;
 
     public GestureLearn() {
-        records = new ArrayList<>(RECORDS_COUNT);
+        records = new ArrayList<>(100);
     }
 
     public Gesture getGesture() {

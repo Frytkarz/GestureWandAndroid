@@ -10,25 +10,61 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:orientation="vertical"
     android:showDividers="middle"
-    android:divider="@drawable/linearlayout_divider"
+    android:divider="@drawable/linearlayout_divider_big"
     tools:context="pl.chipsoft.gesturewand.activities.NewGestureActivity">
 
-    <android.support.design.widget.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        android:divider="@drawable/linearlayout_divider_small">
 
-        <EditText
-            android:id="@+id/angETxtName"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/angETxtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/angSpnAction"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/angSpnParam"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/name" />
+            android:textSize="@dimen/text_big"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="Gestures: 2/20"/>
 
-    </android.support.design.widget.TextInputLayout>
+        <Button
+            android:id="@+id/angBtnClearGestures"
+            style="@style/AppTheme.Button"
+            android:layout_gravity="right"
+            android:text="@string/clear_gestures" />
 
-    <Spinner
-        android:id="@+id/angSpnApp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/angTxtInfo"

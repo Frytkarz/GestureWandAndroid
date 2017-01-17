@@ -2,7 +2,7 @@
 # generated on 2017/01/08 07:34:14
 #
 # --table-start--
-dataClass=pl.chipsoft.gesturewand.library.model.History
+dataClass=pl.chipsoft.gesturewand.library.model.database.History
 tableName=history
 # --table-fields-start--
 # --field-start--
@@ -22,7 +22,7 @@ fieldName=mode
 # --table-end--
 #################################
 # --table-start--
-dataClass=pl.chipsoft.gesturewand.library.model.Gesture
+dataClass=pl.chipsoft.gesturewand.library.model.database.Gesture
 tableName=gestures
 # --table-fields-start--
 # --field-start--
@@ -49,7 +49,7 @@ fieldName=actionParam
 # --table-end--
 #################################
 # --table-start--
-dataClass=pl.chipsoft.gesturewand.library.model.Record
+dataClass=pl.chipsoft.gesturewand.library.model.database.Record
 tableName=records
 # --table-fields-start--
 # --field-start--

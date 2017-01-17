@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/amOptSettings"
+        android:id="@+id/igOptEdit"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/edit"
         app:showAsAction="never" />
     <item
-        android:id="@+id/amOptExit"
+        android:id="@+id/igOptDelete"
         android:orderInCategory="100"
-        android:title="@string/QUIT"
+        android:title="@string/delete"
         app:showAsAction="never" />
 </menu>

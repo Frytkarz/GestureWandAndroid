@@ -19,6 +19,7 @@ import java.util.List;
 
 import pl.chipsoft.gesturewand.R;
 import pl.chipsoft.gesturewand.library.managers.GestureManager;
+import pl.chipsoft.gesturewand.library.model.GestureLearn;
 import pl.chipsoft.gesturewand.library.model.Position;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -49,6 +50,8 @@ public class SummaryFragment extends DrawerFragment {
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
+
+    private GestureManager gestureManager = GestureManager.getInstance();
 
     private List<Position> records;
 
@@ -133,7 +136,8 @@ public class SummaryFragment extends DrawerFragment {
             Log.d(getClass().getName(), "Gesture record started!");
             pressed = true;
             records = new ArrayList<>(100);
-            sensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+            sensorManager.registerListener(sensorListener, accelerometer,
+                    SensorManager.SENSOR_DELAY_FASTEST);
         }
 
         return true;
@@ -146,9 +150,12 @@ public class SummaryFragment extends DrawerFragment {
             if(records.size() >= 10){
                 pressed = false;
                 sensorManager.unregisterListener(sensorListener);
-                GestureManager gestureManager = GestureManager.getInstance();
                 txtInfo.setText("Your gesture is " +
-                        gestureManager.getGesture(gestureManager.compute(records)).getName());
+                        gestureManager.getGesture(gestureManager.compute(
+                                GestureLearn.interpolate(records,
+                                        gestureManager.getDatabase().getConfiguration().
+                                                getSamplesCount()),
+                                accelerometer.getMaximumRange())).getName());
 
                 records = null;
             }else{

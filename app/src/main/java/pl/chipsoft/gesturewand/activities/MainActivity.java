@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Process;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-    private View.OnClickListener onBtnActionClick = view -> {
+    public View.OnClickListener onBtnActionClick = view -> {
         Intent intent = new Intent(MainActivity.this, NewGestureActivity.class);
         getSupportActionBar().setTitle(NewGestureActivity.TITLE);
         startActivity(intent);
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity
         fab = (FloatingActionButton) findViewById(R.id.fab);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+
 
         handler = new Handler();
 
@@ -83,7 +85,8 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         MyApp.getInstance().onResume();
 
-        fragment = new SummaryFragment();
+        if(fragment == null)
+            fragment = new SummaryFragment();
         loadFragment(fragment);
     }
 
@@ -134,10 +137,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.amOptSettings) {
             fragment = new SettingsFragment();
             loadFragment(fragment);
             return true;
+        }else if(id == R.id.amOptExit){
+            Process.killProcess(Process.myPid());
+            System.exit(1);
         }
 
         return super.onOptionsItemSelected(item);

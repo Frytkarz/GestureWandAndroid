@@ -15,7 +15,7 @@ import java.util.List;
 import pl.chipsoft.gesturewand.R;
 import pl.chipsoft.gesturewand.adapters.GestureAdapter;
 import pl.chipsoft.gesturewand.library.managers.GestureManager;
-import pl.chipsoft.gesturewand.library.model.Gesture;
+import pl.chipsoft.gesturewand.library.model.database.Gesture;
 
 /**
  * A simple {@link Fragment} subclass.
