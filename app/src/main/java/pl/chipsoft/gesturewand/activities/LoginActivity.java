@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import pl.chipsoft.gesturewand.R;
+import pl.chipsoft.gesturewand.application.MyApp;
 
 public class LoginActivity extends Activity {
 

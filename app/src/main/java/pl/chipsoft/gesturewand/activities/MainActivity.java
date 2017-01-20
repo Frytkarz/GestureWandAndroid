@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import pl.chipsoft.gesturewand.R;
+import pl.chipsoft.gesturewand.application.MyApp;
 import pl.chipsoft.gesturewand.fragments.DrawerFragment;
 import pl.chipsoft.gesturewand.fragments.GesturesFragment;
 import pl.chipsoft.gesturewand.fragments.SettingsFragment;

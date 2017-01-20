@@ -26,7 +26,7 @@ import pl.chipsoft.gesturewand.library.utils.DatabaseConfigUtil;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "gesture.db";
     // inkrementacja przy zmnianie obiektów
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
     private final Map<Class, Dao> daos;
 

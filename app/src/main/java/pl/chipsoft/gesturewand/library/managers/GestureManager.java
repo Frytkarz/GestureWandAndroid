@@ -1,11 +1,13 @@
 package pl.chipsoft.gesturewand.library.managers;
 
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 
 import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationLOG;
+import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
@@ -22,8 +24,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
 
-import pl.chipsoft.gesturewand.activities.MyApp;
+import pl.chipsoft.gesturewand.R;
+import pl.chipsoft.gesturewand.application.MyApp;
 import pl.chipsoft.gesturewand.library.listeners.TrainListener;
+import pl.chipsoft.gesturewand.library.model.database.Configuration;
 import pl.chipsoft.gesturewand.library.model.database.Gesture;
 import pl.chipsoft.gesturewand.library.model.GestureLearn;
 import pl.chipsoft.gesturewand.library.model.Position;
@@ -35,6 +39,10 @@ import pl.chipsoft.gesturewand.library.utils.MathUtils;
  */
 public class GestureManager {
 
+    //notes
+    //próbki jako kąty pomiędzy kolejnymi samplami
+    //redia krocząca
+    //wizuaizacja
     private static GestureManager instance;
 
     public static GestureManager getInstance(){
@@ -206,10 +214,23 @@ public class GestureManager {
         final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
 
         int epoch = 1;
+        int lastEpoch = 1;
+        double error, lastError = 1, maxError = database.getConfiguration().getMaxError();
         do{
             train.iteration();
-            listener.onStepProgress(epoch++, train.getError());
-        }while (train.getError() > database.getConfiguration().getMaxError());
+            error = train.getError();
+            listener.onStepProgress(epoch++, error);
+//            if(epoch - lastEpoch > 1000){
+//                if(Math.abs(lastError - error) < 0.0001){
+//                    //osiągnięto granice błędu sieci
+//                    break;
+//                }
+//                else{
+//                    lastEpoch = epoch;
+//                    lastError = error;
+//                }
+//            }
+        }while (train.getError() > maxError);
 
         train.finishTraining();
         save();
@@ -368,6 +389,41 @@ public class GestureManager {
         normalizeArray.setNormalizedHigh(HIGH);
         normalizeArray.setNormalizedLow(LOW);
         return normalizeArray;
+    }
+
+    public void checkCalibration(){
+        if(database.getConfiguration().isCalibrated())
+            return;
+
+        calibrate();
+    }
+
+    public void calibrate(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MyApp.getInstance());
+        builder.setTitle(R.string.calibration);
+        builder.setMessage(R.string.calibration_message);
+        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) ->
+        {dialogInterface.dismiss();});
+        builder.setPositiveButton(R.string.calibrate, (dialogInterface, i) -> {
+
+            DatabaseHelper db = GestureManager.getInstance().getDatabase();
+            Dao<Gesture, Integer> gestureDao = db.getDaoGen(Gesture.class);
+            Dao<Record, Integer> recordDao = db.getDaoGen(Record.class);
+            try {
+                recordDao.delete(
+                        recordDao.queryForEq(Record.FIELD_GESTURE_ID, gesture.getId()));
+                gestureDao.deleteById(gesture.getId());
+                remove(gesture);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            notifyDataSetChanged();
+            dialogInterface.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public DatabaseHelper getDatabase() {

@@ -5,6 +5,8 @@ package pl.chipsoft.gesturewand.library.model;
  */
 
 public class Position {
+    private static final float ALPHA = 0.2f;
+
     private float x;
     private float y;
     private float z;
@@ -13,6 +15,12 @@ public class Position {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public Position(float[] values){
+        x = values[0] - (ALPHA * values[0] + (1 - ALPHA) * values[0]);
+        y = values[1] - (ALPHA * values[1] + (1 - ALPHA) * values[1]);
+        z = values[2] - (ALPHA * values[2] + (1 - ALPHA) * values[2]);
     }
 
     public float getX() {

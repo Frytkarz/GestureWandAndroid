@@ -44,4 +44,7 @@
     <string name="samples_count">Samples count</string>
     <string name="max_error">Max error</string>
     <string name="clear_gestures">CLEAR GESTURES</string>
+    <string name="calibration">CALIBRATION</string>
+    <string name="calibration_message">Please put your phone on the table, do not move it and press CALIBRATE</string>
+    <string name="calibrate">CALIBRATE</string>
 </resources>

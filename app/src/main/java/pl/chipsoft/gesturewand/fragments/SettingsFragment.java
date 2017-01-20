@@ -3,7 +3,6 @@ package pl.chipsoft.gesturewand.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -160,7 +159,7 @@ public class SettingsFragment extends DrawerFragment {
 
         new SliderHelper((SeekBar) view.findViewById(R.id.fsSldMaxError),
                 (TextView) view.findViewById(R.id.fsTxtMaxError),
-                Configuration.MAX_ERROR_MIN, Configuration.MAX_ERROR_MAX,
+                Configuration.MAX_ERROR_POW_MIN, Configuration.MAX_ERROR_POW_MAX,
                 (int) Math.log10(1.0 / configuration.getMaxError()),
                 v -> configuration.setMaxError(1.0 / Math.pow(10, v)));
 

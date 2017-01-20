@@ -1,4 +1,4 @@
-package pl.chipsoft.gesturewand.activities;
+package pl.chipsoft.gesturewand.application;
 
 import android.app.Application;
 import android.util.Log;

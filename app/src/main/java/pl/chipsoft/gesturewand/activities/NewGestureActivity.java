@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.chipsoft.gesturewand.R;
+import pl.chipsoft.gesturewand.application.MyApp;
 import pl.chipsoft.gesturewand.library.listeners.TrainListener;
 import pl.chipsoft.gesturewand.library.managers.GestureManager;
 import pl.chipsoft.gesturewand.library.model.database.Gesture;
@@ -53,7 +54,7 @@ public class NewGestureActivity extends Activity {
     private SensorEventListener sensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
-            if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+            if(event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION){
                 records.add(new Position(event.values[0], event.values[1], event.values[2]));
             }
         }
@@ -111,7 +112,7 @@ public class NewGestureActivity extends Activity {
         btnSave.setOnClickListener(onSaveClick);
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         gestureLearn = new GestureLearn();
 
