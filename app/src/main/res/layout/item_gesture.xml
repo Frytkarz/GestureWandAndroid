@@ -16,26 +16,53 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/name"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_big"
             />
 
         <ImageButton
             android:id="@+id/igBtnMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="@dimen/activity_horizontal_margin"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_menu_dots"
             android:text="@string/vertical_ellipsis" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/igTxtApp"
-        android:layout_width="wrap_content"
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="@string/app"
-        android:textSize="16sp"
-        />
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/igTxtRecognizability"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/recognizability_message"
+            android:textSize="@dimen/text_small"
+            />
+
+        <TextView
+            android:id="@+id/igTxtAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/action"
+            android:textSize="@dimen/text_small"
+            />
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:id="@+id/igTxtActionParam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/action_param"
+            android:textSize="@dimen/text_small"
+            />
+    </LinearLayout>
 </LinearLayout>

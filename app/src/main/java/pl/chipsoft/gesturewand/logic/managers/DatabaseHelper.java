@@ -1,4 +1,4 @@
-package pl.chipsoft.gesturewand.library.managers;
+package pl.chipsoft.gesturewand.logic.managers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,11 +13,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import pl.chipsoft.gesturewand.library.model.database.Configuration;
-import pl.chipsoft.gesturewand.library.model.database.Gesture;
-import pl.chipsoft.gesturewand.library.model.database.History;
-import pl.chipsoft.gesturewand.library.model.database.Record;
-import pl.chipsoft.gesturewand.library.utils.DatabaseConfigUtil;
+import pl.chipsoft.gesturewand.logic.model.database.Configuration;
+import pl.chipsoft.gesturewand.logic.utils.DatabaseConfigUtil;
 
 /**
  * Created by Maciej Frydrychowicz on 18.12.2016.
@@ -26,7 +23,7 @@ import pl.chipsoft.gesturewand.library.utils.DatabaseConfigUtil;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "gesture.db";
     // inkrementacja przy zmnianie obiektów
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 21;
 
     private final Map<Class, Dao> daos;
 

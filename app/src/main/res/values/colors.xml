@@ -8,4 +8,7 @@
     <color name="brand4">#83D14B</color>
     <color name="brand5">#8C3E1A</color>
     <color name="brand_grey">#f4f4f4</color>
+    <color name="red">#ff0000</color>
+    <color name="green">#00ff00</color>
+    <color name="blue">#0000FF</color>
 </resources>

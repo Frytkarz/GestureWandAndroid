@@ -1,4 +1,4 @@
-package pl.chipsoft.gesturewand.library.model.database;
+package pl.chipsoft.gesturewand.logic.model.database;
 
 import com.google.gson.Gson;
 import com.j256.ormlite.field.DatabaseField;

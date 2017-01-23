@@ -1,5 +1,10 @@
-package pl.chipsoft.gesturewand.library.managers;
+package pl.chipsoft.gesturewand.logic.managers;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
@@ -7,7 +12,6 @@ import com.j256.ormlite.dao.Dao;
 
 import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationLOG;
-import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
@@ -26,13 +30,13 @@ import java.util.Random;
 
 import pl.chipsoft.gesturewand.R;
 import pl.chipsoft.gesturewand.application.MyApp;
-import pl.chipsoft.gesturewand.library.listeners.TrainListener;
-import pl.chipsoft.gesturewand.library.model.database.Configuration;
-import pl.chipsoft.gesturewand.library.model.database.Gesture;
-import pl.chipsoft.gesturewand.library.model.GestureLearn;
-import pl.chipsoft.gesturewand.library.model.Position;
-import pl.chipsoft.gesturewand.library.model.database.Record;
-import pl.chipsoft.gesturewand.library.utils.MathUtils;
+import pl.chipsoft.gesturewand.logic.listeners.TrainListener;
+import pl.chipsoft.gesturewand.logic.model.database.Configuration;
+import pl.chipsoft.gesturewand.logic.model.database.Gesture;
+import pl.chipsoft.gesturewand.logic.model.GestureLearn;
+import pl.chipsoft.gesturewand.logic.model.Position;
+import pl.chipsoft.gesturewand.logic.model.database.Record;
+import pl.chipsoft.gesturewand.logic.utils.MathUtils;
 
 /**
  * Created by Maciej Frydrychowicz on 05.11.2016.
@@ -119,11 +123,13 @@ public class GestureManager {
         //NormalizeArray normalizeArray = getNormalizeArray();
 
         //przepisanie z listy list do tablicy tablic i nromalizacja
-        double[][] recordInputs = new double[gestureLearn.getRecords().size()][];
-        for (int l = 0; l < gestureLearn.getRecords().size(); l++){
-            double[] positions = new double[gestureLearn.getRecords().get(0).size() * 3];
+        int recordsSize = gestureLearn.getRecords().size();
+        int positionSize = gestureLearn.getRecords().get(0).size();
+        double[][] recordInputs = new double[recordsSize][];
+        for (int l = 0; l < recordsSize; l++){
+            double[] positions = new double[positionSize * 3];
             int index = 0;
-            for (int p = 0; p < gestureLearn.getRecords().get(l).size(); p++){
+            for (int p = 0; p < positionSize; p++){
                 Position position = gestureLearn.getRecords().get(l).get(p);
                 positions[index++] = position.getX() / maxValue;
                 positions[index++] = position.getY() / maxValue;
@@ -237,6 +243,10 @@ public class GestureManager {
         Log.d(this.getClass().getSimpleName(), "Finished learning with error: "
                 + network.calculateError(trainingSet));
 
+        for (Gesture g : gestures) {
+            Log.d(this.getClass().getSimpleName(), "Gesture: " + g.getName() + ", ideal: " + g.getIdeal());
+        }
+
         //test
         for (MLDataPair pair : trainingSet){
             final MLData output = network.compute(pair.getInput());
@@ -280,7 +290,7 @@ public class GestureManager {
         }
 
         double[] ideals = new double[gestures.size()];
-        for (int i = 1; i < gestures.size(); i++)
+        for (int i = 0; i < gestures.size(); i++)
             ideals[i] = gestures.get(i).getIdeal();
 
         return gestures.get(MathUtils.getClosestIndex(output, ideals));
@@ -391,39 +401,60 @@ public class GestureManager {
         return normalizeArray;
     }
 
-    public void checkCalibration(){
+    public void checkCalibration(Context context){
         if(database.getConfiguration().isCalibrated())
             return;
 
-        calibrate();
+        calibrate(context);
     }
 
-    public void calibrate(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MyApp.getInstance());
+    public void calibrate(Context context){
+        Position position = new Position(0, 0, 0, false);
+        SensorManager manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        Sensor accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        SensorEventListener sensorListener = null;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.calibration);
-        builder.setMessage(R.string.calibration_message);
+        builder.setMessage(context.getString(R.string.calibration_message, 0.0, 0.0, 0.0));
         builder.setNegativeButton(R.string.cancel, (dialogInterface, i) ->
         {dialogInterface.dismiss();});
-        builder.setPositiveButton(R.string.calibrate, (dialogInterface, i) -> {
 
-            DatabaseHelper db = GestureManager.getInstance().getDatabase();
-            Dao<Gesture, Integer> gestureDao = db.getDaoGen(Gesture.class);
-            Dao<Record, Integer> recordDao = db.getDaoGen(Record.class);
+        SensorEventListener finalSensorListener = sensorListener;
+        builder.setPositiveButton(R.string.calibrate, (dialogInterface, i) -> {
+            manager.unregisterListener(finalSensorListener);
+            Configuration configuration = database.getConfiguration();
+            configuration.setCalX(position.getX());
+            configuration.setCalY(position.getY());
+            configuration.setCalZ(position.getZ());
             try {
-                recordDao.delete(
-                        recordDao.queryForEq(Record.FIELD_GESTURE_ID, gesture.getId()));
-                gestureDao.deleteById(gesture.getId());
-                remove(gesture);
+                database.getDaoGen(Configuration.class).update(configuration);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
-            notifyDataSetChanged();
             dialogInterface.dismiss();
         });
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        sensorListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+                    position.setValues(event.values, false);
+                    dialog.setMessage(context.getString(R.string.calibration_message,
+                            position.getX(), position.getY(), position.getZ()));
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+
+        manager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     public DatabaseHelper getDatabase() {

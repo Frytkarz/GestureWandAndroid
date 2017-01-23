@@ -1,4 +1,4 @@
-package pl.chipsoft.gesturewand.library.listeners;
+package pl.chipsoft.gesturewand.logic.listeners;
 
 /**
  * Created by Maciej Frydrychowicz on 08.01.2017.

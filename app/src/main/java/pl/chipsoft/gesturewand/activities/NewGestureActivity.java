@@ -25,11 +25,13 @@ import java.util.List;
 
 import pl.chipsoft.gesturewand.R;
 import pl.chipsoft.gesturewand.application.MyApp;
-import pl.chipsoft.gesturewand.library.listeners.TrainListener;
-import pl.chipsoft.gesturewand.library.managers.GestureManager;
-import pl.chipsoft.gesturewand.library.model.database.Gesture;
-import pl.chipsoft.gesturewand.library.model.GestureLearn;
-import pl.chipsoft.gesturewand.library.model.Position;
+import pl.chipsoft.gesturewand.helpers.AccelerometerHelper;
+import pl.chipsoft.gesturewand.logic.listeners.TrainListener;
+import pl.chipsoft.gesturewand.logic.managers.GestureManager;
+import pl.chipsoft.gesturewand.logic.model.database.Configuration;
+import pl.chipsoft.gesturewand.logic.model.database.Gesture;
+import pl.chipsoft.gesturewand.logic.model.GestureLearn;
+import pl.chipsoft.gesturewand.logic.model.Position;
 
 public class NewGestureActivity extends Activity {
 
@@ -42,28 +44,11 @@ public class NewGestureActivity extends Activity {
 
     private boolean volume_up, volume_down, pressed;
 
-    private SensorManager sensorManager;
-    private Sensor accelerometer;
     private ArrayAdapter<String> appAdapter;
 
     private GestureLearn gestureLearn;
-    private List<Position> records;
-
     private GestureManager gestureManager = GestureManager.getInstance();
-
-    private SensorEventListener sensorListener = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if(event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION){
-                records.add(new Position(event.values[0], event.values[1], event.values[2]));
-            }
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-        }
-    };
+    private AccelerometerHelper accelerometer;
 
     private TrainListener trainListener = new TrainListener() {
         @Override
@@ -86,7 +71,7 @@ public class NewGestureActivity extends Activity {
 
         new Thread(() -> {
             boolean result = gestureManager.train(gestureLearn, trainListener,
-                    accelerometer.getMaximumRange());
+                    Configuration.MAX_ACCELERATION/*accelerometer.getAccelerometer().getMaximumRange()*/);
             runOnUiThread(() -> {
                 if(result)
                     finish();
@@ -111,10 +96,8 @@ public class NewGestureActivity extends Activity {
 
         btnSave.setOnClickListener(onSaveClick);
 
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-
         gestureLearn = new GestureLearn();
+        accelerometer = new AccelerometerHelper(this);
 
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -154,9 +137,7 @@ public class NewGestureActivity extends Activity {
         if(volume_up && volume_down && !pressed){
             Log.d(getClass().getName(), "Gesture record started!");
             pressed = true;
-            records = new ArrayList<>(100);
-            sensorManager.registerListener(sensorListener, accelerometer,
-                    SensorManager.SENSOR_DELAY_FASTEST);
+            accelerometer.start();
         }
 
         return true;
@@ -173,9 +154,9 @@ public class NewGestureActivity extends Activity {
                 return true;
             }
 
+            List<Position> records = accelerometer.stop();
+            pressed = false;
             if(records.size() >= 10){
-                pressed = false;
-                sensorManager.unregisterListener(sensorListener);
                 gestureLearn.getRecords().add(GestureLearn.interpolate(records,
                             gestureManager.getDatabase().getConfiguration().getSamplesCount()));
 

@@ -1,8 +1,8 @@
 #
-# generated on 2017/01/08 07:34:14
+# generated on 2017/01/22 10:51:43
 #
 # --table-start--
-dataClass=pl.chipsoft.gesturewand.library.model.database.History
+dataClass=pl.chipsoft.gesturewand.logic.model.database.History
 tableName=history
 # --table-fields-start--
 # --field-start--
@@ -22,7 +22,7 @@ fieldName=mode
 # --table-end--
 #################################
 # --table-start--
-dataClass=pl.chipsoft.gesturewand.library.model.database.Gesture
+dataClass=pl.chipsoft.gesturewand.logic.model.database.Gesture
 tableName=gestures
 # --table-fields-start--
 # --field-start--
@@ -45,11 +45,17 @@ fieldName=action
 # --field-start--
 fieldName=actionParam
 # --field-end--
+# --field-start--
+fieldName=good
+# --field-end--
+# --field-start--
+fieldName=wrong
+# --field-end--
 # --table-fields-end--
 # --table-end--
 #################################
 # --table-start--
-dataClass=pl.chipsoft.gesturewand.library.model.database.Record
+dataClass=pl.chipsoft.gesturewand.logic.model.database.Record
 tableName=records
 # --table-fields-start--
 # --field-start--
@@ -61,6 +67,41 @@ fieldName=gestureId
 # --field-end--
 # --field-start--
 fieldName=json
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=pl.chipsoft.gesturewand.logic.model.database.Configuration
+tableName=configuration
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=minGestureCount
+# --field-end--
+# --field-start--
+fieldName=recordsCount
+# --field-end--
+# --field-start--
+fieldName=samplesCount
+# --field-end--
+# --field-start--
+fieldName=maxError
+# --field-end--
+# --field-start--
+fieldName=isCalibrated
+# --field-end--
+# --field-start--
+fieldName=calX
+# --field-end--
+# --field-start--
+fieldName=calY
+# --field-end--
+# --field-start--
+fieldName=calZ
 # --field-end--
 # --table-fields-end--
 # --table-end--

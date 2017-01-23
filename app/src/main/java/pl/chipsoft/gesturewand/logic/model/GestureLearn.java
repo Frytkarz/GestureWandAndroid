@@ -1,9 +1,9 @@
-package pl.chipsoft.gesturewand.library.model;
+package pl.chipsoft.gesturewand.logic.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.chipsoft.gesturewand.library.model.database.Gesture;
+import pl.chipsoft.gesturewand.logic.model.database.Gesture;
 
 /**
  * Created by Maciej Frydrychowicz on 03.01.2017.
@@ -59,7 +59,8 @@ public class GestureLearn {
                 Position interpolatedPoint = new Position(
                 inputPoints.get(i).getX() + (inputPoints.get(i+1).getX() - inputPoints.get(i).getX()) * 0.5f,
                 inputPoints.get(i).getY() + (inputPoints.get(i+1).getY()  - inputPoints.get(i).getY()) * 0.5f,
-                inputPoints.get(i).getZ()  + (inputPoints.get(i+1).getZ()  - inputPoints.get(i).getZ()) * 0.5f);
+                inputPoints.get(i).getZ()  + (inputPoints.get(i+1).getZ()  - inputPoints.get(i).getZ()) * 0.5f,
+                        false);
                 outputPoints.add(interpolatedPoint);
             }
 
@@ -70,7 +71,7 @@ public class GestureLearn {
             float offset = (float) outputPoints.size() / (float) (outputPoints.size() - numOfElements);
             float index = offset;
 
-            Position elementToDelete = new Position(999.0f, 999.0f, 999.0f);
+            Position elementToDelete = new Position(999.0f, 999.0f, 999.0f, false);
 
             while(index < outputPoints.size()) {
                 outputPoints.remove((int) index);

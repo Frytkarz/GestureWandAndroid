@@ -19,10 +19,10 @@ import java.util.List;
 
 import pl.chipsoft.gesturewand.R;
 import pl.chipsoft.gesturewand.activities.NewGestureActivity;
-import pl.chipsoft.gesturewand.library.managers.DatabaseHelper;
-import pl.chipsoft.gesturewand.library.managers.GestureManager;
-import pl.chipsoft.gesturewand.library.model.database.Gesture;
-import pl.chipsoft.gesturewand.library.model.database.Record;
+import pl.chipsoft.gesturewand.logic.managers.DatabaseHelper;
+import pl.chipsoft.gesturewand.logic.managers.GestureManager;
+import pl.chipsoft.gesturewand.logic.model.database.Gesture;
+import pl.chipsoft.gesturewand.logic.model.database.Record;
 
 /**
  * Created by Maciej Frydrychowicz on 27.12.2016.
@@ -42,16 +42,23 @@ public class GestureAdapter extends ArrayAdapter<Gesture> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_gesture, parent, false);
             holder = new GestureHolder();
             holder.txtName = (TextView) convertView.findViewById(R.id.igTxtName);
-            holder.txtApp = (TextView) convertView.findViewById(R.id.igTxtApp);
+            holder.txtRecognizability = (TextView) convertView.findViewById(R.id.igTxtRecognizability);
+            holder.txtAction = (TextView) convertView.findViewById(R.id.igTxtAction);
+            holder.txtActionParam = (TextView) convertView.findViewById(R.id.igTxtActionParam);
             holder.btnMenu = (ImageButton) convertView.findViewById(R.id.igBtnMenu);
             convertView.setTag(holder);
         }else{
             holder = (GestureHolder) convertView.getTag();
         }
 
+        //teksty
         Gesture gesture = getItem(position);
         holder.txtName.setText(gesture.getName());
-        holder.txtApp.setText(gesture.getAction());
+        int count = gesture.getGood() + gesture.getWrong();
+        holder.txtRecognizability.setText(getContext().getString(R.string.recognizability_message,
+                count == 0 ? 0 : (int) (100.0f * gesture.getGood() / count)));
+//        holder.txtAction.setText(gesture.getAction());
+//        holder.txtActionParam.setText(gesture.getAction());
 
         //menu
         holder.btnMenu.setOnClickListener(view -> {
@@ -97,9 +104,11 @@ public class GestureAdapter extends ArrayAdapter<Gesture> {
         return convertView;
     }
 
-    static class GestureHolder{
+    private class GestureHolder{
         private TextView txtName;
-        private TextView txtApp;
+        private TextView txtRecognizability;
+        private TextView txtAction;
+        private TextView txtActionParam;
         private ImageButton btnMenu;
     }
 }

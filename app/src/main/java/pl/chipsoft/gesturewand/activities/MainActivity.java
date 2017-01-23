@@ -22,8 +22,10 @@ import pl.chipsoft.gesturewand.R;
 import pl.chipsoft.gesturewand.application.MyApp;
 import pl.chipsoft.gesturewand.fragments.DrawerFragment;
 import pl.chipsoft.gesturewand.fragments.GesturesFragment;
+import pl.chipsoft.gesturewand.fragments.LoggerFragment;
 import pl.chipsoft.gesturewand.fragments.SettingsFragment;
 import pl.chipsoft.gesturewand.fragments.SummaryFragment;
+import pl.chipsoft.gesturewand.logic.managers.GestureManager;
 
 public class MainActivity extends AppCompatActivity
         implements DrawerFragment.OnFragmentInteractionListener{
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        //GestureManager.getInstance().checkCalibration(this);
     }
 
     @Override
@@ -160,8 +164,10 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.mItGestures)
             return new GesturesFragment();
-        if (id == R.id.mItSettings)
+        else if (id == R.id.mItSettings)
            return new SettingsFragment();
+        else if(id == R.id.mItLogger)
+            return new LoggerFragment();
 
         return new SummaryFragment();
     }
@@ -170,18 +176,15 @@ public class MainActivity extends AppCompatActivity
         navigationView.getMenu().getItem(fragment.getIndex()).setChecked(true);
         getSupportActionBar().setTitle(fragment.getTitle(MainActivity.this));
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                // update the main content by replacing fragments
-                FragmentTransaction fragmentTransaction =
-                        getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.amFragmentFrame,
-                        fragment, fragment.getTag());
-                fragmentTransaction.commitAllowingStateLoss();
-            }
+        Runnable runnable = () -> {
+            // update the main content by replacing fragments
+            FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.amFragmentFrame,
+                    fragment, fragment.getTag());
+            fragmentTransaction.commitAllowingStateLoss();
         };
 
         handler.post(runnable);

@@ -1,14 +1,14 @@
-package pl.chipsoft.gesturewand.library.utils;
+package pl.chipsoft.gesturewand.logic.utils;
 
 import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-import pl.chipsoft.gesturewand.library.model.database.Configuration;
-import pl.chipsoft.gesturewand.library.model.database.Gesture;
-import pl.chipsoft.gesturewand.library.model.database.History;
-import pl.chipsoft.gesturewand.library.model.database.Record;
+import pl.chipsoft.gesturewand.logic.model.database.Configuration;
+import pl.chipsoft.gesturewand.logic.model.database.Gesture;
+import pl.chipsoft.gesturewand.logic.model.database.History;
+import pl.chipsoft.gesturewand.logic.model.database.Record;
 
 /**
  * Created by Maciej Frydrychowicz on 18.12.2016.

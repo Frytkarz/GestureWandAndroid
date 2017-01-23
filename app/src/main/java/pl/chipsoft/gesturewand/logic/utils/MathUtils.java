@@ -1,4 +1,4 @@
-package pl.chipsoft.gesturewand.library.utils;
+package pl.chipsoft.gesturewand.logic.utils;
 
 /**
  * Created by Maciej Frydrychowicz on 08.01.2017.

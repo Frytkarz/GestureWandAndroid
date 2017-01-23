@@ -1,4 +1,4 @@
-package pl.chipsoft.gesturewand.library.model.database;
+package pl.chipsoft.gesturewand.logic.model.database;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -19,6 +19,8 @@ public class Configuration {
     public static final int MAX_ERROR_POW_MAX = 7;
     public static final double MAX_ERROR_MIN = 0.01;
     public static final double MAX_ERROR_MAX = 0.0000001;
+
+    public static final int MAX_ACCELERATION = 50;
 
     @DatabaseField(generatedId = true)
     private int id = 1;
