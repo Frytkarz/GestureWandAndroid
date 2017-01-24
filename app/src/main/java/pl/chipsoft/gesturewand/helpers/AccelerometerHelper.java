@@ -24,6 +24,8 @@ public class AccelerometerHelper {
     private List<Position> positions;
     private LowPassFilter lpf;
 
+    private boolean isWorking;
+
     private SensorEventListener sensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -45,6 +47,7 @@ public class AccelerometerHelper {
     }
 
     public void start(){
+        isWorking = true;
         positions = new ArrayList<>(500);
         lpf = new SmoothLowPassFilter();
         sensorManager.registerListener(sensorListener, accelerometer,
@@ -53,10 +56,15 @@ public class AccelerometerHelper {
 
     public List<Position> stop(){
         sensorManager.unregisterListener(sensorListener);
+        isWorking = false;
         return positions;
     }
 
     public Sensor getAccelerometer() {
         return accelerometer;
+    }
+
+    public boolean isWorking() {
+        return isWorking;
     }
 }

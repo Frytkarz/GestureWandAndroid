@@ -1,6 +1,9 @@
 package pl.chipsoft.gesturewand.logic.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import pl.chipsoft.gesturewand.logic.model.database.Gesture;
@@ -10,14 +13,13 @@ import pl.chipsoft.gesturewand.logic.model.database.Gesture;
  */
 
 public class GestureLearn {
-//    public static final int RECORDS_COUNT = 10;
-//    public static final int SINGLE_RECORD_COUNT = 30;
-
     private Gesture gesture;
     private List<List<Position>> records;
 
     public GestureLearn() {
         records = new ArrayList<>(100);
+        gesture = new Gesture(SimpleDateFormat.
+                getDateTimeInstance().format(Calendar.getInstance().getTime()));
     }
 
     public Gesture getGesture() {
@@ -36,9 +38,6 @@ public class GestureLearn {
         this.records = records;
     }
 
-    public void save(){
-
-    }
 
     public static List<Position> interpolate(List<Position> inputPoints, int numOfElements) {
         if(inputPoints.size() < 3) {

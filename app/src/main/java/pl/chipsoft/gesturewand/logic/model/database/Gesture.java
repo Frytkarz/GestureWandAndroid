@@ -12,11 +12,8 @@ public class Gesture {
     public static final String ACTION_NONE = "None";
     public static final String ACTION_APP = "Open app";
     public static final String ACTION_CALL = "Call number";
-    public static final String ACTION_ANSWER_CALL = "Answer call";
-    public static final String ACTION_UNLOCK = "Unlock screen";
 
-    public static final String[] ACTIONS = new String[]{ACTION_NONE, ACTION_APP, ACTION_CALL,
-            ACTION_ANSWER_CALL, ACTION_UNLOCK};
+    public static final String[] ACTIONS = new String[]{ACTION_NONE, ACTION_APP, ACTION_CALL};
 
     @DatabaseField(generatedId = true)
     private int id;
@@ -45,13 +42,12 @@ public class Gesture {
     public Gesture() {
     }
 
-    public Gesture(String name) {
-        this.name = name;
+    public Gesture(String createDate) {
+        this.createDate = createDate;
     }
 
-    public Gesture(String name, String action) {
-        this.name = name;
-        this.action = action;
+    public void resetRecognizability(){
+        good = wrong = 0;
     }
 
     public int getId() {
@@ -92,5 +88,21 @@ public class Gesture {
 
     public void incWrong() {
         wrong++;
+    }
+
+    public String getActionParam() {
+        return actionParam;
+    }
+
+    public void setActionParam(String actionParam) {
+        this.actionParam = actionParam;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

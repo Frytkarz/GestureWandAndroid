@@ -2,6 +2,7 @@ package pl.chipsoft.gesturewand.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -55,10 +57,13 @@ public class GestureAdapter extends ArrayAdapter<Gesture> {
         Gesture gesture = getItem(position);
         holder.txtName.setText(gesture.getName());
         int count = gesture.getGood() + gesture.getWrong();
+        float percent = count == 0 ? 0 : (1.0f * gesture.getGood() / count);
         holder.txtRecognizability.setText(getContext().getString(R.string.recognizability_message,
-                count == 0 ? 0 : (int) (100.0f * gesture.getGood() / count)));
-//        holder.txtAction.setText(gesture.getAction());
-//        holder.txtActionParam.setText(gesture.getAction());
+                gesture.getGood(), count, (int) (percent * 100)));
+        holder.txtRecognizability.setTextColor(
+                Color.rgb((int) (255 * (1 - percent)),(int) (255 * percent), 0));
+        holder.txtAction.setText(gesture.getAction());
+        holder.txtActionParam.setText(gesture.getActionParam());
 
         //menu
         holder.btnMenu.setOnClickListener(view -> {
@@ -69,6 +74,7 @@ public class GestureAdapter extends ArrayAdapter<Gesture> {
                 int id = menuItem.getItemId();
                 if(id == R.id.igOptEdit){
                     Intent intent = new Intent(getContext(), NewGestureActivity.class);
+                    intent.putExtra(NewGestureActivity.GESTURE, new Gson().toJson(gesture));
                     getContext().startActivity(intent);
                 }else if (id == R.id.igOptDelete){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

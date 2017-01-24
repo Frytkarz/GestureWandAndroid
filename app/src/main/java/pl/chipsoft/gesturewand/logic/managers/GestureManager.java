@@ -12,6 +12,7 @@ import com.j256.ormlite.dao.Dao;
 
 import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationLOG;
+import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
@@ -63,15 +64,9 @@ public class GestureManager {
     private static final String NETWORK_FILE_NAME = "gesture_network";
     private static final int HIGH = 1;
     private static final int LOW = -1;
-//    private static final double MAX_ERROR = 0.000001;
-//
-//    public static final int MIN_GESTURE_COUNT = 3;
 
     private BasicNetwork network;
     private final DatabaseHelper database;
-
-//    private final double XOR_INPUTS[][] = {{0.0, 0.0}, {1.0, 0.0}, {0.0, 1.0}, {1.0, 1.0}};
-//    private final double XOR_IDEAL[][] = {{0.0}, {1.0}, {1.0}, {0.0}};
 
     private GestureManager(){
         //baza danych
@@ -95,7 +90,8 @@ public class GestureManager {
             network.addLayer(new BasicLayer(
                     null, true, database.getConfiguration().getSamplesCount() * 3));
             network.addLayer(new BasicLayer(
-                    new ActivationLOG(), true, database.getConfiguration().getSamplesCount() * 2));
+                    new ActivationLOG(), true,
+                    (int) (Math.sqrt(2) * database.getConfiguration().getSamplesCount() * 3)));
             network.addLayer(new BasicLayer(
                     new ActivationLOG(), false, 1));
             network.getStructure().finalizeStructure();
@@ -120,7 +116,6 @@ public class GestureManager {
         }
 
         //normalizacja wyników
-        //NormalizeArray normalizeArray = getNormalizeArray();
 
         //przepisanie z listy list do tablicy tablic i nromalizacja
         int recordsSize = gestureLearn.getRecords().size();
@@ -225,7 +220,7 @@ public class GestureManager {
         do{
             train.iteration();
             error = train.getError();
-            listener.onStepProgress(epoch++, error);
+            listener.onStepProgress(epoch++, error, maxError / error);
 //            if(epoch - lastEpoch > 1000){
 //                if(Math.abs(lastError - error) < 0.0001){
 //                    //osiągnięto granice błędu sieci
@@ -330,7 +325,26 @@ public class GestureManager {
         return "Result: actual= " + output.getData(0) + ", ideal= " + gesture.getIdeal();
     }
 
+    private void resetGesturesRecognizability(){
+        Dao<Gesture, Integer> gestureDao = database.getDaoGen(Gesture.class);
+        List<Gesture> gestures = null;
+        try {
+            gestures = gestureDao.queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (Gesture g : gestures) {
+            g.resetRecognizability();
+            try {
+                gestureDao.update(g);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void resetNetwork(){
+        resetGesturesRecognizability();
         initNetwork(true);
     }
 
@@ -339,54 +353,9 @@ public class GestureManager {
         initNetwork(true);
     }
 
-//    public double[] testUnique(double[] input){
-//        double[] output = new double[input.length / 3];
-//        int o = 0;
-//        for (int i = 0; i < input.length; i+=3, o++)
-//            output[o] = (Math.pow(2, input[i])
-//                    * Math.pow(2, input[i])
-//                    * Math.pow(2, input[i]))
-//                    / 8;
-//        return output;
-//    }
-//
-//    public double[][] testUnique(double[][] input){
-//        double[][] output = new double[input.length][input[0].length / 3];
-//        for (int i = 0; i < input.length; i++)
-//            output[i] = testUnique(input[i]);
-//
-//        return output;
-//    }
+    public void processGestureAction(Context context, Gesture gesture){
 
-//    public void learn(){
-//        MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUTS, XOR_IDEAL);
-//        final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
-//
-//        int epoch = 1;
-//        do{
-//            train.iteration();
-//            Log.d("GestureManager", "Epoch " + String.valueOf(epoch) + "| Error: " + train.getError());
-//            epoch++;
-//        }while (train.getError() > 0.01);
-//
-//        test();
-//
-//        Encog.getInstance().shutdown();
-//
-//        save();
-//    }
-//
-//    public void test(){
-//        MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUTS, XOR_IDEAL);
-//        Log.d("GestureManager", "Neural Network Results: ");
-//        for (MLDataPair pair : trainingSet){
-//            final MLData output = network.compute(pair.getInput());
-//            Log.d("GestureWand", pair.getInput().getData(0) + ", " + pair.getInput().getData(1)
-//                    + ", actual= " + output.getData(0) + ", ideal= " + pair.getIdeal().getData(0));
-//        }
-//
-//        Encog.getInstance().shutdown();
-//    }
+    }
 
     private void save(){
         Log.d(this.getClass().getSimpleName(), "Saving neural network to file!");
@@ -399,62 +368,6 @@ public class GestureManager {
         normalizeArray.setNormalizedHigh(HIGH);
         normalizeArray.setNormalizedLow(LOW);
         return normalizeArray;
-    }
-
-    public void checkCalibration(Context context){
-        if(database.getConfiguration().isCalibrated())
-            return;
-
-        calibrate(context);
-    }
-
-    public void calibrate(Context context){
-        Position position = new Position(0, 0, 0, false);
-        SensorManager manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        Sensor accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        SensorEventListener sensorListener = null;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.calibration);
-        builder.setMessage(context.getString(R.string.calibration_message, 0.0, 0.0, 0.0));
-        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) ->
-        {dialogInterface.dismiss();});
-
-        SensorEventListener finalSensorListener = sensorListener;
-        builder.setPositiveButton(R.string.calibrate, (dialogInterface, i) -> {
-            manager.unregisterListener(finalSensorListener);
-            Configuration configuration = database.getConfiguration();
-            configuration.setCalX(position.getX());
-            configuration.setCalY(position.getY());
-            configuration.setCalZ(position.getZ());
-            try {
-                database.getDaoGen(Configuration.class).update(configuration);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            dialogInterface.dismiss();
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        sensorListener = new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-                if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
-                    position.setValues(event.values, false);
-                    dialog.setMessage(context.getString(R.string.calibration_message,
-                            position.getX(), position.getY(), position.getZ()));
-                }
-            }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-            }
-        };
-
-        manager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     public DatabaseHelper getDatabase() {

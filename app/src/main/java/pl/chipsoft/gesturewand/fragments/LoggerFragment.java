@@ -1,24 +1,15 @@
 package pl.chipsoft.gesturewand.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.annotation.StringDef;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ListAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidplot.xy.LineAndPointFormatter;
@@ -35,22 +26,15 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import pl.chipsoft.gesturewand.R;
 import pl.chipsoft.gesturewand.helpers.AccelerometerHelper;
-import pl.chipsoft.gesturewand.logic.filters.LowPassFilter;
-import pl.chipsoft.gesturewand.logic.filters.SmoothLowPassFilter;
 import pl.chipsoft.gesturewand.logic.managers.GestureManager;
 import pl.chipsoft.gesturewand.logic.model.GestureLearn;
 import pl.chipsoft.gesturewand.logic.model.Position;
 import pl.chipsoft.gesturewand.logic.model.database.Configuration;
 import pl.chipsoft.gesturewand.logic.model.database.Gesture;
-import pl.chipsoft.gesturewand.logic.model.database.Record;
-
-import static android.content.Context.SENSOR_SERVICE;
 
 /**
  *
@@ -265,6 +249,6 @@ public class LoggerFragment extends DrawerFragment {
 
     @Override
     public int getIndex() {
-        return 3;
+        return 2;
     }
 }

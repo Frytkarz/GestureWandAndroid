@@ -5,6 +5,6 @@ package pl.chipsoft.gesturewand.logic.listeners;
  */
 
 public interface TrainListener {
-    void onStepProgress(int epoch, double error);
+    void onStepProgress(int epoch, double error, double progress);
     void onMessage(String message);
 }

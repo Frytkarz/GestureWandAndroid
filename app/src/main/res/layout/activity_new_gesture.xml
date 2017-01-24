@@ -37,34 +37,50 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/angSpnParam"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/angSpnParam"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"/>
+
+            <EditText
+                android:id="@+id/angETxtParam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:hint="@string/parameter"
+                android:enabled="false"/>
+
+
+        </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_big"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:text="Gestures: 2/20"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="@dimen/text_big"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:textAlignment="center"-->
+            <!--android:text="Gestures: 2/20"/>-->
 
-        <Button
-            android:id="@+id/angBtnClearGestures"
-            style="@style/AppTheme.Button"
-            android:layout_gravity="right"
-            android:text="@string/clear_gestures" />
+        <!--<Button-->
+            <!--android:id="@+id/angBtnClearGestures"-->
+            <!--style="@style/AppTheme.Button"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:text="@string/clear_gestures" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
     <TextView
         android:id="@+id/angTxtInfo"

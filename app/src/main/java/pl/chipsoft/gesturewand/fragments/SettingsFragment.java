@@ -35,7 +35,7 @@ public class SettingsFragment extends DrawerFragment {
 
     private TrainListener trainListener = new TrainListener() {
         @Override
-        public void onStepProgress(int epoch, double error) {
+        public void onStepProgress(int epoch, double error, double progress) {
             getActivity().runOnUiThread(() ->
                     txtInfo.setText(getString(R.string.training_progress_message, epoch, error)));
         }
@@ -48,7 +48,6 @@ public class SettingsFragment extends DrawerFragment {
     };
 
     private View.OnClickListener onBtnRetrainClick = v -> {
-        Log.d("Click","Hello");
         new Thread(() -> {
             try {
                 gestureManager.getDatabase().getDaoGen(Configuration.class).update(configuration);
@@ -140,6 +139,6 @@ public class SettingsFragment extends DrawerFragment {
 
     @Override
     public int getIndex() {
-        return 2;
+        return 3;
     }
 }

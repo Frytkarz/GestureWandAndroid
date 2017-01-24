@@ -46,8 +46,6 @@ public class MainActivity extends AppCompatActivity
         public boolean onNavigationItemSelected(MenuItem item) {
             fragment = getFragment(item);
 
-//            item.setChecked(!item.isChecked());
-//            item.setChecked(true);
             loadFragment(fragment);
             drawer.closeDrawer(GravityCompat.START);
             return true;

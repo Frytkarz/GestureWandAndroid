@@ -4,20 +4,20 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/mItSummary"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_brain"
             android:title="@string/summary" />
         <item
             android:id="@+id/mItGestures"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_list"
             android:title="@string/gestures" />
         <item
-            android:id="@+id/mItSettings"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/settings" />
-        <item
             android:id="@+id/mItLogger"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_plot"
             android:title="@string/logger" />
+        <item
+            android:id="@+id/mItSettings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
     </group>
 
 </menu>

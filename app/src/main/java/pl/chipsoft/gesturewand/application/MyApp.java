@@ -1,7 +1,10 @@
 package pl.chipsoft.gesturewand.application;
 
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
+
+import pl.chipsoft.gesturewand.background.BackgroundService;
 
 /**
  * Created by Maciej Frydrychowicz on 12.12.2016.
@@ -14,8 +17,6 @@ public class MyApp extends Application {
         return instance;
     }
 
-//    private AudioManager audioManager;
-
     @Override
     public void onCreate() {
         instance = this;
@@ -23,31 +24,12 @@ public class MyApp extends Application {
     }
 
     public void onResume(){
-//        ComponentName receiver = new ComponentName(MediaReceiver.class.getPackage().getName(),
-//                MediaReceiver.class.getName());
-//        getAudioManager().unregisterMediaButtonEventReceiver(receiver);
-
-//        Intent intent = new Intent( getApplicationContext(), BackgroundService.class );
-//        intent.setAction( BackgroundService.ACTION_PLAY );
-//        stopService(intent);
-        Log.d(this.getClass().getSimpleName(), "Media receiver unregistered!");
+        //stopService(new Intent(this, BackgroundService.class));
+        //Log.d(this.getClass().getSimpleName(), "Background service stopped!");
     }
 
     public void onPause(){
-//        ComponentName receiver = new ComponentName(getPackageName(),
-//                MediaReceiver.class.getName());
-//        getAudioManager().registerMediaButtonEventReceiver(receiver);
-
-//        Intent intent = new Intent( getApplicationContext(), BackgroundService.class );
-//        intent.setAction( BackgroundService.ACTION_PLAY );
-//        startService( intent );
-        Log.d(this.getClass().getSimpleName(), "Media receiver registered!");
+        //startService(new Intent(this, BackgroundService.class));
+        //Log.d(this.getClass().getSimpleName(), "Background service started!");
     }
-
-//    private AudioManager getAudioManager(){
-//        if(audioManager == null)
-//            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//
-//        return audioManager;
-//    }
 }

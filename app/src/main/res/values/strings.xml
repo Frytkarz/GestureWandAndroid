@@ -33,8 +33,8 @@
     <string name="clear_db">CLEAR ALL</string>
     <string name="random_test">RANDOM TEST</string>
     <string name="QUIT">EXIT</string>
-    <string name="edit">EDIT</string>
-    <string name="delete">DELETE</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
     <string name="delete_gesture_ask">Do you really want to delete gesture?</string>
     <string name="cancel">CANCEL</string>
     <string name="delete_gesture">Delete gesture</string>
@@ -58,7 +58,12 @@
     <string name="no">NO</string>
     <string name="yes">YES</string>
     <string name="wrong_gesture_message">What a pity! Tell me what was it?</string>
-    <string name="recognizability_message">Recognizability: %1$d \%</string>
+    <string name="recognizability_message">%1$d / %2$d = %3$d</string>
     <string name="action">Action</string>
     <string name="action_param">Action param</string>
+    <string name="exit">Exit</string>
+    <string name="parameter">Parameter</string>
+    <string name="learning">Learning</string>
+    <string name="gesture">Gesture</string>
+    <string name="gesture_message">I found gesture: %1$s! Do you want to do this: %2$s</string>
 </resources>
