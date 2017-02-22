@@ -78,7 +78,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             }
         }
 
-
         return daos.get(type);
     }
 

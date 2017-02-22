@@ -1,6 +1,5 @@
 package pl.chipsoft.gesturewand.logic.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -35,8 +34,8 @@ public final class AppUtils {
                 findFirst().get();
     }
 
-    public static void call(Activity activity, String phone){
+    public static void call(Context context, String phone){
         Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
-        activity.startActivity(callIntent);
+        context.startActivity(callIntent);
     }
 }

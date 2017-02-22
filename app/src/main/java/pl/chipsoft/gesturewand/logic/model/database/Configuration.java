@@ -35,7 +35,7 @@ public class Configuration {
     private int samplesCount = 30;
 
     @DatabaseField
-    private double maxError = 0.000001;
+    private double maxError = 0.0001;
 
     @DatabaseField
     private boolean isCalibrated = false;

@@ -18,7 +18,6 @@ import pl.chipsoft.gesturewand.logic.model.GestureLearn;
 import pl.chipsoft.gesturewand.logic.model.Position;
 import pl.chipsoft.gesturewand.logic.model.database.Configuration;
 import pl.chipsoft.gesturewand.logic.model.database.Gesture;
-import pl.chipsoft.gesturewand.logic.utils.AppUtils;
 
 /**
  *
@@ -104,11 +103,7 @@ public class SummaryFragment extends DrawerFragment {
 
         builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
             dialogInterface.dismiss();
-            if(gesture.getAction().equals(Gesture.ACTION_APP)){
-                AppUtils.openApp(getContext(), gesture.getActionParam());
-            }else if (gesture.getAction().equals(Gesture.ACTION_CALL)){
-                AppUtils.call(getActivity(), gesture.getActionParam());
-            }
+            gestureManager.processGestureAction(getActivity(), gesture);
         });
 
         builder.setNegativeButton(R.string.no, (dialogInterface, i) -> {

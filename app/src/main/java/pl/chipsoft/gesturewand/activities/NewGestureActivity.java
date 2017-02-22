@@ -82,10 +82,10 @@ public class NewGestureActivity extends Activity {
         //progress
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setTitle(R.string.learning);
-        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setIndeterminate(true);
-        dialog.setMax(1000);
-        dialog.setProgress(0);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
         //zapisz i ucz
@@ -93,9 +93,8 @@ public class NewGestureActivity extends Activity {
             boolean result = gestureManager.train(gestureLearn, new TrainListener() {
                         @Override
                         public void onStepProgress(int epoch, double error, double progress) {
-                            dialog.setMessage(
-                                    getString(R.string.training_progress_message, epoch, error));
-                            dialog.setProgress((int) (progress * dialog.getMax()));
+                            runOnUiThread(() -> dialog.setMessage(
+                                    getString(R.string.training_progress_message, epoch, error)));
                         }
 
                         @Override

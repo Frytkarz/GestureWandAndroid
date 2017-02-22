@@ -1,18 +1,12 @@
 package pl.chipsoft.gesturewand.logic.managers;
 
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 
 import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationLOG;
-import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
@@ -29,14 +23,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
 
-import pl.chipsoft.gesturewand.R;
 import pl.chipsoft.gesturewand.application.MyApp;
 import pl.chipsoft.gesturewand.logic.listeners.TrainListener;
-import pl.chipsoft.gesturewand.logic.model.database.Configuration;
-import pl.chipsoft.gesturewand.logic.model.database.Gesture;
 import pl.chipsoft.gesturewand.logic.model.GestureLearn;
 import pl.chipsoft.gesturewand.logic.model.Position;
+import pl.chipsoft.gesturewand.logic.model.database.Gesture;
 import pl.chipsoft.gesturewand.logic.model.database.Record;
+import pl.chipsoft.gesturewand.logic.utils.AppUtils;
 import pl.chipsoft.gesturewand.logic.utils.MathUtils;
 
 /**
@@ -44,11 +37,7 @@ import pl.chipsoft.gesturewand.logic.utils.MathUtils;
  */
 public class GestureManager {
 
-    //notes
-    //próbki jako kąty pomiędzy kolejnymi samplami
-    //redia krocząca
-    //wizuaizacja
-    private static GestureManager instance;
+    private static volatile GestureManager instance;
 
     public static GestureManager getInstance(){
         if(instance == null){
@@ -87,13 +76,9 @@ public class GestureManager {
         else{
             Log.d(this.getClass().getSimpleName(), "Could not find neural network file! Creating new one!");
             network = new BasicNetwork();
-            network.addLayer(new BasicLayer(
-                    null, true, database.getConfiguration().getSamplesCount() * 3));
-            network.addLayer(new BasicLayer(
-                    new ActivationLOG(), true,
-                    (int) (Math.sqrt(2) * database.getConfiguration().getSamplesCount() * 3)));
-            network.addLayer(new BasicLayer(
-                    new ActivationLOG(), false, 1));
+            network.addLayer(new BasicLayer(null, true, database.getConfiguration().getSamplesCount() * 3));
+            network.addLayer(new BasicLayer(new ActivationLOG(), true, (int) (Math.sqrt(2) * database.getConfiguration().getSamplesCount() * 3)));
+            network.addLayer(new BasicLayer(new ActivationLOG(), false, 1));
             network.getStructure().finalizeStructure();
             network.reset();
 
@@ -215,23 +200,12 @@ public class GestureManager {
         final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
 
         int epoch = 1;
-        int lastEpoch = 1;
-        double error, lastError = 1, maxError = database.getConfiguration().getMaxError();
+        double error, maxError = database.getConfiguration().getMaxError();
         do{
             train.iteration();
             error = train.getError();
             listener.onStepProgress(epoch++, error, maxError / error);
-//            if(epoch - lastEpoch > 1000){
-//                if(Math.abs(lastError - error) < 0.0001){
-//                    //osiągnięto granice błędu sieci
-//                    break;
-//                }
-//                else{
-//                    lastEpoch = epoch;
-//                    lastError = error;
-//                }
-//            }
-        }while (train.getError() > maxError);
+        }while (error > maxError);
 
         train.finishTraining();
         save();
@@ -354,7 +328,11 @@ public class GestureManager {
     }
 
     public void processGestureAction(Context context, Gesture gesture){
-
+        if(gesture.getAction().equals(Gesture.ACTION_APP)){
+            AppUtils.openApp(context, gesture.getActionParam());
+        }else if (gesture.getAction().equals(Gesture.ACTION_CALL)){
+            AppUtils.call(context, gesture.getActionParam());
+        }
     }
 
     private void save(){

@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class AccelerometerHelper {
     private List<Position> positions;
     private LowPassFilter lpf;
 
+    private int speed = SensorManager.SENSOR_DELAY_FASTEST;
     private boolean isWorking;
 
     private SensorEventListener sensorListener = new SensorEventListener() {
@@ -50,13 +52,13 @@ public class AccelerometerHelper {
         isWorking = true;
         positions = new ArrayList<>(500);
         lpf = new SmoothLowPassFilter();
-        sensorManager.registerListener(sensorListener, accelerometer,
-                SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(sensorListener, accelerometer, speed);
     }
 
     public List<Position> stop(){
         sensorManager.unregisterListener(sensorListener);
         isWorking = false;
+        Log.d(getClass().getSimpleName(), "Recorded " + positions.size() + " samples.");
         return positions;
     }
 
@@ -66,5 +68,13 @@ public class AccelerometerHelper {
 
     public boolean isWorking() {
         return isWorking;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 }

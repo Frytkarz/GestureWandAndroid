@@ -1,10 +1,6 @@
 package pl.chipsoft.gesturewand.application;
 
 import android.app.Application;
-import android.content.Intent;
-import android.util.Log;
-
-import pl.chipsoft.gesturewand.background.BackgroundService;
 
 /**
  * Created by Maciej Frydrychowicz on 12.12.2016.
